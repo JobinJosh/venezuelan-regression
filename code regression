@@ -1,0 +1,44 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Updated data from 2018 to 2024
+years = np.array([2018, 2019, 2020, 2021, 2022, 2023, 2024])
+population = np.array([2729, 8824, 19587, 28785, 22345, 23449, 28294])
+
+# Perform linear regression using NumPy
+coefficients = np.polyfit(years, population, 1)
+linear_model = np.poly1d(coefficients)
+
+# Predict the population for 2025
+year_2025 = 2025
+predicted_population_2025 = linear_model(year_2025)
+
+# Create a table with the original and predicted data
+data = {
+    "Year": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "Population": [2729, 8824, 19587, 28785, 22345, 23449, 28294, round(predicted_population_2025)]
+}
+df = pd.DataFrame(data)
+
+# Print the table
+print(df)
+
+# Plotting the data and the regression line
+plt.scatter(years, population, color='blue', label='Actual Data')
+plt.plot(np.append(years, year_2025), linear_model(np.append(years, year_2025)),
+         color='red', label='Regression Line')
+plt.scatter(year_2025, predicted_population_2025, color='green', label='Prediction for 2025')
+
+# Annotate data points with numbers
+for i, txt in enumerate(population):
+    plt.text(years[i], population[i], str(txt), fontsize=8, ha='right', va='bottom')
+
+# Annotate the 2025 prediction
+plt.text(year_2025, predicted_population_2025, str(round(predicted_population_2025)), fontsize=8, ha='right', va='bottom')
+
+plt.xlabel("Year")
+plt.ylabel("Population")
+plt.title("Population Forecast using NumPy Linear Regression")
+plt.legend()
+plt.show()
